@@ -100,6 +100,7 @@ export class PlayerImpl implements Player {
 
   private _hasSpawned = false;
   private _isAFK = false;
+  private _timeOfDeath = -1;
 
   constructor(
     private mg: GameImpl,
@@ -137,6 +138,7 @@ export class PlayerImpl implements Player {
       smallID: this.smallID(),
       playerType: this.type(),
       isAlive: this.isAlive(),
+      timeOfDeath: this.timeOfDeath(),
       isAFK: this.isAFK(),
       tilesOwned: this.numTilesOwned(),
       gold: Number(this._gold),
@@ -294,8 +296,15 @@ export class PlayerImpl implements Player {
   info(): PlayerInfo {
     return this.playerInfo;
   }
+
   isAlive(): boolean {
     return this._tiles.size > 0;
+  }
+
+  timeOfDeath(): number {
+    if (!this.isAlive() && this._timeOfDeath === -1)
+      this._timeOfDeath = Date.now();
+    return this._timeOfDeath;
   }
 
   hasSpawned(): boolean {
